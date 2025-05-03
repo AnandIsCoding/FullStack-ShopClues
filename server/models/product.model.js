@@ -28,7 +28,7 @@ const productSchema = new mongoose.Schema({
   },
   thumbnail: {
     type: String,
-    default: ''
+    required:true
   },
   ratingAndReviews: [
     {
