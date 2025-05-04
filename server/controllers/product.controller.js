@@ -1,7 +1,9 @@
 import chalk from "chalk";
+import mongoose from 'mongoose'
 
 import Product from "../models/product.model.js";
 import Category from "../models/category.model.js";
+
 import {
   isFileTypeSupported,
   uploadFileToCloudinary,
@@ -167,6 +169,7 @@ export const getProductByIDController = async(req,res) =>{
     // db query for productId findByID, and populate it with category
     // return response with product
     const {productId} = req.params
+    console.log('Id is --> ',productId)
     if(!productId){
       return res.status(400).json({success:false, message:'productId not Found !!', error:'productId not Found !!'})
     }
@@ -178,7 +181,8 @@ export const getProductByIDController = async(req,res) =>{
         error: "Invalid Product ID format",
       });
     }
-    const product = await Product.findById(productId).populate('category')
+    // request db fetch profuct and populate category (only name desc and thumbnail)
+    const product = await Product.findById(productId).populate('category' ,'name description thumbnail')
     if(!product){
       return res.status(404).json({success:false, message:'Product Not Found !!', error:'Product Not Found !!'})
     }
