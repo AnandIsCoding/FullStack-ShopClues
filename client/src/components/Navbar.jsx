@@ -22,7 +22,7 @@ export default function Navbar() {
   const navigate = useNavigate()
 
   return (
-    <nav className="w-full sticky text-sm font-sans">
+    <nav className="w-full sticky top-0 z-50 text-sm font-sans bg-white">
       {/* Top Info Bar */}
       <div className="w-full  text-xs flex justify-between md:justify-end pl-2 pr-1 py-1 gap-4 bg-white!">
         <div onClick={()=>navigate('/')} className="text-xl font-bold text-teal-600 md:hidden">
@@ -121,7 +121,7 @@ export default function Navbar() {
         </div>
 
         {hoveredCategoryId !== null && (
-          <div className="absolute left-0 top-30 md:top-32 w-full z-50">
+          <div className="absolute left-0 top-36 md:top-32 w-full z-50">
             <MegaDropDown
               categoryId={hoveredCategoryId}
               categoryName={hoveredCategoryName}
