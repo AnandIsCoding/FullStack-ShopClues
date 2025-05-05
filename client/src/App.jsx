@@ -7,6 +7,7 @@ import { Route, Routes } from 'react-router-dom';
 import Home from './pages/Home';
 import Cart from './pages/Cart'
 import Wishlist from './pages/Wishlist'
+import Footer from './components/Footer';
 
 function App() {
   const disableContextMenu = (event) => {
@@ -38,7 +39,7 @@ function App() {
 
 {/* Footerfor all pages */}
 <MobileOptions/>
-      {/* <Footer/>  */}
+      <Footer/> 
       </Suspense>
            
 

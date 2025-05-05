@@ -14,10 +14,12 @@ import MegaDropDown from "./MegaDropDown.jsx";
 import SearchResultTab from "./SearchResultTab.jsx";
 import { useNavigate } from "react-router-dom";
 
+
 export default function Navbar() {
   const [search, setSearch] = useState("");
   const [hoveredCategoryId, setHoveredCategoryId] = useState(null);
   const [hoveredCategoryName, setHoveredCategoryName] = useState(null);
+
 
   const navigate = useNavigate()
 

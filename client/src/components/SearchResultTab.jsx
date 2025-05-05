@@ -6,13 +6,14 @@ function SearchResultTab({ search, setSearch }) {
   const [filteredProducts, setFilteredProducts] = useState([]);
   const navigate = useNavigate();
   const containerRef = useRef(null);
+  const BASE_URL = import.meta.env.VITE_BASE_URL
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const res = await fetch("https://fakestoreapi.com/products");
+        const res = await fetch(`${BASE_URL}/product/all`);
         const data = await res.json();
-        setProducts(data);
+        setProducts(data?.products);
       } catch (error) {
         console.log("Error fetching products:", error);
       }
@@ -64,12 +65,12 @@ function SearchResultTab({ search, setSearch }) {
       ) : (
         filteredProducts?.slice(0, 20)?.map((item) => (
           <div
-            key={item?.id}
-            onClick={() => handleNavigationToProduct(item?.id)}
-            className="flex items-center gap-4 p-2 sm:p-3 rounded-md hover:bg-gray-100 transition-colors cursor-pointer"
+            key={item?._id}
+            onClick={() => handleNavigationToProduct(item?._id)}
+            className="flex items-center gap-4 p-x2 sm:p-3 rounded-md hover:bg-gray-100 transition-colors cursor-pointer"
           >
             <img
-              src={item?.image}
+              src={item?.thumbnail}
               alt={item?.title}
               className="h-12 w-12 object-contain rounded-md"
             />

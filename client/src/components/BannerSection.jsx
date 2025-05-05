@@ -3,7 +3,7 @@ import Slider from "../MiniUi/Slider";
 
 const BannerSection = () => {
   return (
-    <div className="w-full  px-2 py-1  max-h-[30vh]">
+    <div className="w-full  px-2 py-1 ">
       <div className="max-w-[1280px] mx-auto flex flex-col lg:flex-row gap-4">
         {/* Left Section - Slider */}
         <div className="flex-1  rounded  overflow-hidden">
