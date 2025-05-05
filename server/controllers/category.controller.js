@@ -112,6 +112,48 @@ export const getAllCategoriesController = async (req, res) => {
   }
 };
 
+// getProductByCategory
+
+export const getProductsByCategoryController = async (req, res) => {
+  try {
+    const { categoryId } = req.params;
+
+    if (!categoryId) {
+      return res.status(400).json({
+        success: false,
+        message: "Category ID is required",
+        error: "Missing categoryId",
+      });
+    }
+
+    const categoryExists = await Category.findById(categoryId);
+    if (!categoryExists) {
+      return res.status(404).json({
+        success: false,
+        message: "Category not found",
+        error: "Invalid categoryId",
+      });
+    }
+
+    const products = await Product.find({ category: categoryId });
+
+    return res.status(200).json({
+      success: true,
+      message: products.length > 0 ? "Products fetched successfully" : "No products found in this category",
+      products,
+    });
+
+  } catch (error) {
+    console.error(chalk.bgRed("Error in getProductsByCategoryController ------->>> "), error);
+    return res.status(500).json({
+      success: false,
+      message: "Internal Server Error",
+      error: "Something went wrong while fetching products by category",
+    });
+  }
+};
+
+
 // delete category controller
 
 export const deleteCategoryController = async (req, res) => {

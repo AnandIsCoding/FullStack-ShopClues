@@ -1,0 +1,149 @@
+@import "tailwindcss";
+
+body {
+  margin: 0; /* Removes default margin */
+  padding: 0; /* Removes default padding */
+  width: 100%; /* Full width */
+  height: 100vh; /* Full height */
+  box-sizing: border-box; /* Includes padding & border in total size */
+  background-color: #ececec; /* Base background color */
+}
+
+* {
+  font-family: "Open Sans", sans-serif;
+}
+
+/* set scrollbar height and weidth to 0 so that it will be removed from page */
+::-webkit-scrollbar {
+  width: 0px;
+  height: 0px;
+  background-color: rgb(134, 40, 196);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+.mega-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 25%;
+  display: flex;
+  background-color: white;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  z-index: 100;
+  min-width: 800px;
+}
+.menu-item {
+  position: relative;
+  cursor: pointer;
+  font-weight: bold;
+  padding: 8px;
+}
+
+.column {
+  flex: 1;
+  margin-right: 40px;
+}
+
+.column h4 {
+  margin-bottom: 10px;
+  font-size: 16px;
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 5px;
+}
+
+.column ul {
+  list-style: none;
+  padding: 0;
+}
+
+.column li {
+  margin: 5px 0;
+  cursor: pointer;
+}
+
+@media (max-width: 1024px) {
+  .mega-dropdown {
+    left: 0;
+    min-width: 100%;
+    flex-wrap: wrap;
+    padding: 15px;
+    box-shadow: none;
+    max-height: 40vh;
+    overflow-y: scroll;
+  }
+
+  .column {
+    flex: 1 1 45%;
+    margin-right: 20px;
+    margin-bottom: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .mega-dropdown {
+    flex-direction: column;
+    padding: 10px;
+    top:0;
+  }
+  
+
+  .column {
+    flex: 1 1 100%;
+    margin-right: 0;
+    margin-bottom: 15px;
+  }
+
+  .column h4 {
+    font-size: 34px;
+  }
+
+  .column li {
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 480px) {
+  .mega-dropdown {
+    padding: 8px;
+    min-width: 100vw;
+  }
+
+  .column h4 {
+    font-size: 13px;
+  }
+
+  .column li {
+    font-size: 12px;
+  }
+
+  .menu-item {
+    font-size: 14px;
+    padding: 6px;
+  }
+}
+
+.mega-dropdown,
+.mega-dropdown * {
+  color: black; /* Dark text color */
+}
+
+/* Ensure it's not clipped by parent */
+.parent-container {
+  position: relative;
+  overflow: visible !important;
+  z-index: 10;
+}
+
+.searchbg {
+  background: #833ab4;
+  background: linear-gradient(
+    90deg,
+    rgba(131, 58, 180, 1) 0%,
+    rgb(240, 138, 138) 0%,
+    rgba(252, 159, 64, 1) 43%,
+    rgb(247, 84, 44) 100%
+  );
+}
