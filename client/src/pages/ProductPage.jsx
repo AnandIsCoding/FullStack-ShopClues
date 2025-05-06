@@ -8,6 +8,7 @@ import {
   FaShareAlt,
 } from "react-icons/fa";
 import ShareDialog from "../components/ShareDialog";
+import ProductCarousel from "../components/ProductCarousel";
 // import toast from "react-hot-toast";
 // import { useDispatch, useSelector } from "react-redux";
 // import { useAuth0 } from "@auth0/auth0-react";
@@ -26,6 +27,12 @@ function ProductPage() {
   const [showMoreoffer, setShowmoreoffer] = useState(false);
   // import baseUrl from .env
   const BASE_URL = import.meta.env.VITE_BASE_URL;
+
+  // product that will be shown in products page as suggestion, related products
+  const [relatedProducts, setRelatedProducts] = useState([]);
+
+  
+
 //  subscribe cart and wishlist
 //   const cartItems = useSelector((state) => state.cart.items);
 //   const wishlistItems = useSelector((state) => state.wishlist.items || []);
@@ -39,6 +46,19 @@ function ProductPage() {
         const res = await fetch(`${BASE_URL}/product/${id}`);
         const data = await res.json();
         setProduct(data.product);
+
+        // Fetch all products
+        const allRes = await fetch(`${BASE_URL}/product/all`);
+        const allData = await allRes.json();
+  
+        // filter products where category name is same as product fetched by Id and filtered products must not include that product id
+        const sameCategory = allData.products.filter(
+          (p) =>
+            p.category.name === data.product.category.name &&
+            p._id !== data.product._id
+        );
+  
+        setRelatedProducts(sameCategory);
       } catch (error) {
         console.error("Error fetching product:", error);
       } finally {
@@ -53,7 +73,9 @@ function ProductPage() {
   // if loading show a loading text
   if (loading) {
     return (
-      <div className="text-center py-10 font-semibold text-lg">Loading...</div>
+      <div className="text-center flex items-center justify-center py-34 bg-white font-semibold text-lg">
+        <img src='/Fidget-spinner.gif' alt="loader" className="w-24 h-24" />
+      </div>
     );
   }
  // handle cart btn handler
@@ -228,15 +250,6 @@ function ProductPage() {
               <FaUndoAlt />
               <p>7 Days Return and Replacement available</p>
             </div>
-
-            {/* <div className="border p-2 rounded-md text-sm mt-4">
-              <p className="text-gray-700">
-                Sold By{" "}
-                <span className="font-semibold">
-                  Arvind Life Style Brands Ltd
-                </span>
-              </p>
-            </div> */}
           </div>
 
           {/* Share + Buy + Add to Bag */}
@@ -319,6 +332,16 @@ function ProductPage() {
           setShowshareDialog={setShowshareDialog}
         />
       )}
+
+
+        {/* Related products mapping */}
+      {relatedProducts.length > 0 && (
+  <ProductCarousel
+    name={`Related Products in ${product?.category?.name}`}
+    products={relatedProducts}
+  />
+)}
+
     </div>
   );
 }

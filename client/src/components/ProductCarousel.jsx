@@ -16,7 +16,7 @@ const ProductCarousel = ({ name, products }) => {
     <div className="my-8">
       <h2 className="text-xl font-semibold mb-4 px-4">{name}</h2>
       <div
-        className={`flex overflow-x-auto gap-4 px-4 scrollbar-hide ${
+        className={`flex overflow-x-scroll gap-4 px-4 scrollbar-hide ${
           isLoading ? "bg-none" : "bg-white"
         } `}
       >
@@ -31,7 +31,7 @@ const ProductCarousel = ({ name, products }) => {
               <div
                 key={product?._id}
                 onClick={()=>handleNavigationToProduct(product._id)}
-                className="group min-w-[150px] px-6 py-8 rounded-md cursor-pointer bg-white hover:shadow-md  transition duration-200"
+                className="group min-w-[150px] px-6 py-8 rounded-md cursor-pointer bg-white   transition duration-200"
               >
                 <img
                   src={product?.thumbnail}

@@ -11,6 +11,7 @@ import userRouter from './routes/auth.route.js';
 import categoryRouter from './routes/category.route.js';
 import adminRouter from './routes/admin.route.js';
 import productRouter from './routes/product.route.js';
+import cartRouter from './routes/cart.route.js';
 
 const app = express()
 
@@ -56,6 +57,8 @@ app.use('/api/v1/category',categoryRouter)
 app.use('/api/v1/admin', adminRouter)
 
 app.use('/api/v1/product',productRouter)
+
+app.use('/api/v1/cart', cartRouter)
 
 
 // database connection

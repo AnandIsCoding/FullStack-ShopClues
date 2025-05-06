@@ -2,11 +2,12 @@ import User from "../models/user.model.js";
 import Product from "../models/product.model.js"; 
 import Cart from "../models/cart.model.js"; 
 
-export const addToCartController = async (req, res) => {
-  try {
-    const { userId, productId } = req.body;
 
-    // Validate input
+export const addRemoveCartController = async (req, res) => {
+  try {
+    const { productId } = req.body;
+    const { userId } = req.user;
+
     if (!userId || !productId) {
       return res.status(400).json({
         success: false,
@@ -14,9 +15,7 @@ export const addToCartController = async (req, res) => {
       });
     }
 
-    // Check if the product exists
     const product = await Product.findById(productId);
-
     if (!product) {
       return res.status(404).json({
         success: false,
@@ -24,9 +23,7 @@ export const addToCartController = async (req, res) => {
       });
     }
 
-    // Find the user by userId
-    const user = await User.findById(userId);
-
+    const user = await User.findById(userId).populate("cart");
     if (!user) {
       return res.status(404).json({
         success: false,
@@ -34,56 +31,102 @@ export const addToCartController = async (req, res) => {
       });
     }
 
-    // Check if the user already has a cart
+    let cart;
     if (!user.cart) {
-      // If the user doesn't have a cart, create one
-      const newCart = new Cart({
+      cart = new Cart({
         userId: user._id,
         items: [{ productId }],
       });
+      await cart.save();
 
-      // Save the new cart to the user's model
-      user.cart = newCart;
+      user.cart = cart._id;
+      await user.save();
+
+      return res.status(200).json({
+        success: true,
+        message: "Cart created and product added",
+        cart,
+      });
     } else {
-      const cart = user.cart;
+      cart = user.cart;
 
-      // Check if the product already exists in the cart
       const existingProductIndex = cart.items.findIndex(
         (item) => item.productId.toString() === productId
       );
 
       if (existingProductIndex !== -1) {
-        // If product is already in the cart, remove it
-        cart.items.splice(existingProductIndex, 1); // Remove the item from the array
-
-        // Save the updated cart
-        await user.save();
+        cart.items.splice(existingProductIndex, 1);
+        await cart.save();
 
         return res.status(200).json({
           success: true,
-          message: "Product removed from cart successfully",
-          cart: user.cart, // Return the updated cart
+          message: "Product removed from cart",
+          cart,
+        });
+      } else {
+        cart.items.push({ productId });
+        await cart.save();
+
+        return res.status(200).json({
+          success: true,
+          message: "Product added to cart",
+          cart,
         });
       }
-
-      // If the product is not in the cart, add it
-      cart.items.push({ productId });
     }
 
-    // Save the updated user document with the modified cart
-    await user.save();
-
-    // Return the updated cart
-    return res.status(200).json({
-      success: true,
-      message: "Product added to cart successfully",
-      cart: user.cart, // Return the updated cart
-    });
   } catch (error) {
-    console.error("Error in addToCartController:", error);
+    console.error("Error in addRemoveCartController:", error);
     return res.status(500).json({
       success: false,
-      message: "Internal Server Error",
+      message: "Internal server error",
+      error: error.message,
+    });
+  }
+};
+
+
+
+
+// get cart 
+
+export const getUserCartController = async (req, res) => {
+  try {
+    const { userId } = req.user;
+
+    if (!userId) {
+      return res.status(400).json({
+        success: false,
+        message: "User ID is required",
+      });
+    }
+
+    // Find user and populate the cart
+    const user = await User.findById(userId).populate({
+      path: "cart",
+      populate: {
+        path: "items.productId",
+        model: "Product",
+      },
+    });
+
+    if (!user || !user.cart) {
+      return res.status(404).json({
+        success: false,
+        message: "Cart not found",
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: "Cart fetched successfully",
+      cart: user.cart,
+    });
+  } catch (error) {
+    console.error("Error in getUserCartController:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error",
       error: error.message,
     });
   }

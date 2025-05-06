@@ -13,13 +13,23 @@ import { NavCategoryItems } from "../utils/HelperData.js";
 import MegaDropDown from "./MegaDropDown.jsx";
 import SearchResultTab from "./SearchResultTab.jsx";
 import { useNavigate } from "react-router-dom";
+import LoginPopup from "../MiniUi/LoginPopup.jsx";
+import { useRef } from "react";
+
 
 export default function Navbar() {
   const [search, setSearch] = useState("");
   const [hoveredCategoryId, setHoveredCategoryId] = useState(null);
   const [hoveredCategoryName, setHoveredCategoryName] = useState(null);
   const [allCategories, setAllCategories] = useState([]);
+  const [showLoginpopup, setShowloginpopup] = useState(false)
+  
   const BASE_URL = import.meta.env.VITE_BASE_URL;
+  document.addEventListener('click',()=>{
+    setShowloginpopup(false)
+  })
+
+  
 
   const fetchCategories = async () => {
     try {
@@ -97,7 +107,7 @@ export default function Navbar() {
 
           {/* mOBILE SCREEN hidden 🌿🌿🌿🌿✅✅✅✅✅✅✅ */}
           {/* Right Icons */}
-          <div className=" items-center gap-5 text-gray-600 text-lg hidden lg:flex">
+          <div className=" items-center gap-5 text-gray-600 text-lg hidden lg:flex ">
             <div className="flex items-center gap-1 text-sm text-blue-600 cursor-pointer">
               <FaMapMarkerAlt className="text-[#24A3B5] text-2xl font-bold" />
               <span className="hidden sm:inline text-[#24A3B5] text-xxs">
@@ -113,9 +123,16 @@ export default function Navbar() {
               onClick={() => navigate("/cart")}
               className="cursor-pointer text-[#24A3B5] text-2xl font-bold"
             />
-            <button className="text-sm bg-white  border border-blue-600 px-3 py-1 rounded">
-              Sign In / Account
-            </button>
+            <div
+  className="relative"
+  onMouseEnter={() => setShowloginpopup(true)}
+  onMouseLeave={() => setShowloginpopup(false)}
+>
+  <button className="text-sm bg-white cursor-pointer px-3 py-1 rounded">
+    Sign In / Account
+  </button>
+  {showLoginpopup && <LoginPopup />}
+</div>
           </div>
         </div>
       </div>
