@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   FaSearch,
   FaMapMarkerAlt,
@@ -8,26 +8,42 @@ import {
 } from "react-icons/fa";
 import { IoMdHeartEmpty, IoMdNotificationsOutline } from "react-icons/io";
 import { IoCartOutline } from "react-icons/io5";
-
+import axios from "axios";
 import { NavCategoryItems } from "../utils/HelperData.js";
 import MegaDropDown from "./MegaDropDown.jsx";
 import SearchResultTab from "./SearchResultTab.jsx";
 import { useNavigate } from "react-router-dom";
 
-
 export default function Navbar() {
   const [search, setSearch] = useState("");
   const [hoveredCategoryId, setHoveredCategoryId] = useState(null);
   const [hoveredCategoryName, setHoveredCategoryName] = useState(null);
+  const [allCategories, setAllCategories] = useState([]);
+  const BASE_URL = import.meta.env.VITE_BASE_URL;
 
+  const fetchCategories = async () => {
+    try {
+      const res = await axios.get(`${BASE_URL}/category/all`);
+      const data = res.data;
+      setAllCategories(data?.categories);
+    } catch (error) {
+      console.log("Error in fetching Categories in Navbar ---->> ", error);
+    }
+  };
+  useEffect(() => {
+    fetchCategories();
+  }, []);
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   return (
     <nav className="w-full sticky top-0 z-50 text-sm font-sans bg-white">
       {/* Top Info Bar */}
       <div className="w-full  text-xs flex justify-between md:justify-end pl-2 pr-1 py-1 gap-4 bg-white!">
-        <div onClick={()=>navigate('/')} className="text-xl font-bold text-teal-600 md:hidden">
+        <div
+          onClick={() => navigate("/")}
+          className="text-xl font-bold text-teal-600 md:hidden"
+        >
           <span className="text-black">SHOP</span>
           <span className="text-teal-600">CLUES</span>
         </div>
@@ -49,7 +65,10 @@ export default function Navbar() {
       <div className="bg-white shadow-md w-full">
         <div className="max-w-screen-xl mx-auto flex flex-wrap items-center justify-between py-3 pl-4 lg:px-0">
           {/* Logo */}
-          <div onClick={()=>navigate('/')} className="text-xl cursor-pointer font-bold text-teal-600 hidden lg:flex">
+          <div
+            onClick={() => navigate("/")}
+            className="text-xl cursor-pointer font-bold text-teal-600 hidden lg:flex"
+          >
             <span className="text-black">SHOP</span>
             <span className="text-teal-600">CLUES</span>
           </div>
@@ -76,8 +95,7 @@ export default function Navbar() {
             )}
           </div>
 
-
-              {/* mOBILE SCREEN hidden 🌿🌿🌿🌿✅✅✅✅✅✅✅ */}
+          {/* mOBILE SCREEN hidden 🌿🌿🌿🌿✅✅✅✅✅✅✅ */}
           {/* Right Icons */}
           <div className=" items-center gap-5 text-gray-600 text-lg hidden lg:flex">
             <div className="flex items-center gap-1 text-sm text-blue-600 cursor-pointer">
@@ -86,9 +104,15 @@ export default function Navbar() {
                 Location
               </span>
             </div>
-            <IoMdHeartEmpty onClick={()=>navigate('/wishlist')} className="cursor-pointer text-[#24A3B5] text-2xl font-bold" />
+            <IoMdHeartEmpty
+              onClick={() => navigate("/wishlist")}
+              className="cursor-pointer text-[#24A3B5] text-2xl font-bold"
+            />
             <IoMdNotificationsOutline className="cursor-pointer text-[#24A3B5] text-2xl font-bold" />
-            <IoCartOutline onClick={()=>navigate('/cart')} className="cursor-pointer text-[#24A3B5] text-2xl font-bold" />
+            <IoCartOutline
+              onClick={() => navigate("/cart")}
+              className="cursor-pointer text-[#24A3B5] text-2xl font-bold"
+            />
             <button className="text-sm bg-white  border border-blue-600 px-3 py-1 rounded">
               Sign In / Account
             </button>
@@ -96,37 +120,49 @@ export default function Navbar() {
         </div>
       </div>
 
-      {/* Category Menu */}
-      <div className="w-full bg-[#24A3B5] text-white text-xxs sm:text-xs font-thin uppercase">
+           {/* Category Menu */}
+           <div className="w-full bg-[#24A3B5] text-white text-xxs sm:text-xs font-thin uppercase">
         <div className="overflow-x-auto md:overflow-x-hidden">
           <div
             className="flex flex-nowrap md:flex-wrap gap-4 px-4 py-2 w-max md:w-full 
-                    justify-start md:justify-center"
+             justify-start md:justify-center"
           >
-            {NavCategoryItems.map((item, index) => (
-              <span
-                key={index}
-                onMouseEnter={() => {
-                  setHoveredCategoryId(index);
-                  setHoveredCategoryName(item);
-                }}
-                onMouseLeave={() => {
-                  setHoveredCategoryId(null);
-                  setHoveredCategoryName(null);
-                }}
-                className="cursor-pointer whitespace-nowrap px-2 py-1"
-              >
-                {item}
-              </span>
-            ))}
+            {allCategories && allCategories.length > 0 ? (
+              allCategories.map((item) => (
+                <span
+                  key={item?._id}
+                  onMouseEnter={() => {
+                    setHoveredCategoryId(item?._id);
+                    setHoveredCategoryName(item?.name);
+                  }}
+                  onMouseLeave={() => {
+                    setHoveredCategoryId(null);
+                    setHoveredCategoryName(null);
+                  }}
+                  className="cursor-pointer whitespace-nowrap px-2 py-1 relative"
+                >
+                  {item?.name}
+                </span>
+              ))
+            ) : (
+              <div className="text-gray-300 italic animate-pulse px-4 ">
+                Loading categories...
+              </div>
+            )}
           </div>
         </div>
 
+        {/* Mega Dropdown */}
         {hoveredCategoryId !== null && (
-          <div className="absolute left-0 top-36 md:top-32 w-full z-50">
+          <div
+            className="relative left-0 top-0 w-full z-50"
+            onMouseEnter={() => setHoveredCategoryId(hoveredCategoryId)}
+            onMouseLeave={() => setHoveredCategoryId(null)}
+          >
             <MegaDropDown
               categoryId={hoveredCategoryId}
               categoryName={hoveredCategoryName}
+              setHoveredCategoryId={setHoveredCategoryId}
             />
           </div>
         )}

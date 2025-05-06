@@ -67,7 +67,7 @@ function SearchResultTab({ search, setSearch }) {
           <div
             key={item?._id}
             onClick={() => handleNavigationToProduct(item?._id)}
-            className="flex items-center gap-4 p-x2 sm:p-3 rounded-md hover:bg-gray-100 transition-colors cursor-pointer"
+            className="flex items-center gap-4 mt-1 md:mt-0 px-2 sm:p-3 rounded-md hover:bg-gray-100 transition-colors cursor-pointer"
           >
             <img
               src={item?.thumbnail}

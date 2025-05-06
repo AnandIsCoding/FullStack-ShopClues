@@ -8,6 +8,7 @@ import Home from './pages/Home';
 import Cart from './pages/Cart'
 import Wishlist from './pages/Wishlist'
 import Footer from './components/Footer';
+import ProductPage from '../src/pages/ProductPage'
 
 function App() {
   const disableContextMenu = (event) => {
@@ -35,6 +36,7 @@ function App() {
         <Route path='/wishlist' element={<Wishlist/>} />
         {/* <Route path='/profile' element={<Profile/>} />
         <Route path='/orders' element={ <Orders/> } /> */}
+        <Route path="/product/:id" element={<ProductPage/>} />
       </Routes>
 
 {/* Footerfor all pages */}

@@ -1,10 +1,16 @@
 import { FaArrowRight } from "react-icons/fa";
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 const shimmerCount = 9;
 
+
 const ProductCarousel = ({ name, products }) => {
   const isLoading = !products || products.length === 0;
+  const navigate = useNavigate()
+  const handleNavigationToProduct = (id) => {
+    navigate(`/product/${id}`);
+  };
 
   return (
     <div className="my-8">
@@ -24,6 +30,7 @@ const ProductCarousel = ({ name, products }) => {
           : products.map((product) => (
               <div
                 key={product?._id}
+                onClick={()=>handleNavigationToProduct(product._id)}
                 className="group min-w-[150px] px-6 py-8 rounded-md cursor-pointer bg-white hover:shadow-md  transition duration-200"
               >
                 <img
