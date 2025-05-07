@@ -7,10 +7,7 @@ import chalk from "chalk";
 export const isAuthenticatedUser = async (req, res, next) => {
   try {
     //extract token
-    const userToken =
-      req.cookies?.userToken ||
-      req.body?.userToken ||
-      req.header("Authorization")?.replace("Bearer ", "");
+    const {userToken} = req.cookies
 
     // if token not available
     if (!userToken)

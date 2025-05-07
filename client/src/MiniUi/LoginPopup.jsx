@@ -9,10 +9,17 @@ import {
 } from "react-icons/fi";
 import { useLocation, useNavigate } from "react-router-dom";
 import Signup from "./Signup";
+import { setShowSignup, toggleSignupModal } from "../redux/slices/modal.slice";
+import { useDispatch } from "react-redux";
 
 function LoginPopup() {
   const navigate = useNavigate();
   let user = null
+  const dispatch = useDispatch()
+
+  const handleTogleSignup = () =>{
+    dispatch(toggleSignupModal())
+  }
 
   
 
@@ -38,7 +45,7 @@ function LoginPopup() {
         </div>
       ) : (
         
-        <button
+        <button onClick={handleTogleSignup}
           className="px-5 py-2 bg-[#FF0C22] text-white rounded-full cursor-pointer mb-4"
         >
           Login / Signup

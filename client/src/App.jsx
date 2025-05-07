@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Suspense } from 'react'
 import ScrollToTop from '../src/components/ScrollToTop'
 import Navbar from './components/Navbar';
@@ -9,11 +9,39 @@ import Cart from './pages/Cart'
 import Wishlist from './pages/Wishlist'
 import Footer from './components/Footer';
 import ProductPage from '../src/pages/ProductPage'
+import { useSelector } from 'react-redux';
+import Signup from './MiniUi/Signup';
+import axios from 'axios';
+const BASE_URL = import.meta.env.VITE_BASE_URL
 
 function App() {
+ 
+  const isshowSignupPage = useSelector(state => state.modal.showSignupPage)
+  console.log(isshowSignupPage)
   const disableContextMenu = (event) => {
     event.preventDefault();  // Disable the right-click menu
+   
   };
+
+  
+  const ProfileHandler = async () => {
+    try {
+      const res = await axios.get(`${BASE_URL}/user/profile`, {
+        withCredentials: true,
+      });
+  
+      console.log("Profile Fetched:", res.data);
+      // You can update user state or Redux here
+    } catch (error) {
+      console.error("Error in ProfileHandler:", error.response?.data || error.message);
+    }
+  };
+  
+  useEffect(() => {
+    ProfileHandler();
+  }, []);
+  
+  
   return (
     <div className='select-none' onContextMenu={disableContextMenu} > 
     <ScrollToTop/> 
@@ -26,8 +54,12 @@ function App() {
         }
       >
 {/* fixed  Navbar Component for all pages*/}
+
 <Navbar/>
       {/* all routes defined */}
+      {
+        isshowSignupPage && <Signup/>
+      }
       <Routes>
         <Route path='/' element={<Home/>} />
         {/* <Route path='/:category' element={<SpecificCategory/>} />

@@ -85,7 +85,6 @@ export const signupController = async (req, res) => {
       httpOnly: true,
       sameSite: "strict",
       maxAge: 7 * 24 * 60 * 60 * 1000,
-      secure: process.env.NODE_ENV === "production",
     });
 
     res.status(201).json({
@@ -146,7 +145,6 @@ export const loginController = async(req,res) =>{
         httpOnly: true,
         sameSite: "strict",
         maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-        secure: process.env.NODE_ENV === "production",
       })
       .json({
         message: "User Login successfull",
