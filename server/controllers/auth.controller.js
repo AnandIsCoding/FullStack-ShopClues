@@ -83,9 +83,11 @@ export const signupController = async (req, res) => {
 
     res.cookie("userToken", usertoken, {
       httpOnly: true,
-      sameSite: "strict",
+      sameSite: "none",
+      secure: process.env.NODE_ENV === "production" ? true : false, // For testing locally without HTTPS
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
+    
 
     res.status(201).json({
       success: true,
@@ -140,13 +142,12 @@ export const loginController = async(req,res) =>{
     const usertoken = jwt.sign({ _id: user._id, accountType: user.accountType }, process.env.SECRET_KEY, {
       expiresIn: "7d",
     });
-    res
-      .cookie("userToken", usertoken, {
-        httpOnly: true,
-        sameSite: "none",
-        maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-      })
-      .json({
+    res.cookie("userToken", usertoken, {
+      httpOnly: true,
+      sameSite: "none",
+      secure: process.env.NODE_ENV === "production" ? true : false, // For testing locally without HTTPS
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    }).json({
         message: "User Login successfull",
         success: true,
         user,
