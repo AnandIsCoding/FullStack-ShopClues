@@ -143,7 +143,7 @@ export const loginController = async(req,res) =>{
     res
       .cookie("userToken", usertoken, {
         httpOnly: true,
-        sameSite: "strict",
+        sameSite: "none",
         maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
       })
       .json({
@@ -180,7 +180,7 @@ export const logoutController = async (req, res) => {
   try {
     res.clearCookie("userToken", {
       httpOnly: true,
-      sameSite: "strict",
+      sameSite: "none",
       secure: process.env.NODE_ENV === "production", // optional for HTTPS enforcement
     });
 
