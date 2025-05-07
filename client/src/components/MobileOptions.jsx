@@ -13,9 +13,12 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { BsPerson } from "react-icons/bs";
 import LoginPopup from "../MiniUi/LoginPopup";
 import { useRef, useEffect } from "react";
+import { useSelector } from "react-redux";
+import toast from "react-hot-toast";
 
 function MobileOptions() {
   const [showLoginpopup, setShowloginpopup] = useState(false)
+  const cartItems = useSelector(state => state.user.cart)
   const navigate = useNavigate();
   const location = useLocation()
   const accountRef = useRef(null);
@@ -72,16 +75,16 @@ useEffect(() => {
 
 
       {/* Wishlist */}
-      <div
+      {/* <div
         onClick={() => navigate('/wishlist')}
         className="flex flex-col items-center justify-center text-[#24A3B5] active:scale-95 transition-transform duration-150 cursor-pointer"
       >
         <IoMdHeartEmpty className="text-xl sm:text-2xl" />
         <span className="mt-1 text-xs sm:text-sm font-medium">Wishlist</span>
-      </div>
+      </div> */}
 
       {/* Notifications */}
-      <div className="flex flex-col items-center justify-center text-[#24A3B5] cursor-pointer active:scale-95 transition-transform duration-150">
+      <div onClick={()=>toast.success('Under Construction ...')} className="flex flex-col items-center justify-center text-[#24A3B5] cursor-pointer active:scale-95 transition-transform duration-150">
         <IoMdNotificationsOutline className="text-xl sm:text-2xl" />
         <span className="mt-1 text-xs sm:text-sm font-medium">Alerts</span>
       </div>
@@ -93,6 +96,11 @@ useEffect(() => {
       >
         <IoCartOutline className="text-xl sm:text-2xl" />
         <span className="mt-1 text-xs sm:text-sm font-medium">Cart</span>
+        {cartItems?.length > 0 && (
+                <span className="absolute top-0 right-2 bg-red-500 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full">
+                  {cartItems?.length}
+                </span>
+              )}
       </div>
 
 

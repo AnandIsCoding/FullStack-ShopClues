@@ -9,14 +9,11 @@ import {
 } from "react-icons/fa";
 import ShareDialog from "../components/ShareDialog";
 import ProductCarousel from "../components/ProductCarousel";
-// import toast from "react-hot-toast";
-// import { useDispatch, useSelector } from "react-redux";
-// import { useAuth0 } from "@auth0/auth0-react";
-// import { addToCart, removeFromCart } from "../redux/slices/cart.slice";
-// import {
-//   addToWishlist,
-//   removeFromWishlist,
-// } from "../redux/slices/wishlist.slice";
+import toast from "react-hot-toast";
+import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import { setUser, setUserCart } from "../redux/slices/user.slice";
+import { setShowSignup } from "../redux/slices/modal.slice";
 
 function ProductPage() {
   
@@ -27,18 +24,15 @@ function ProductPage() {
   const [showMoreoffer, setShowmoreoffer] = useState(false);
   // import baseUrl from .env
   const BASE_URL = import.meta.env.VITE_BASE_URL;
+  const cartItems = useSelector(state => state.user.cart)
+  const user = useSelector((state) => state.user.user);
 
   // product that will be shown in products page as suggestion, related products
   const [relatedProducts, setRelatedProducts] = useState([]);
+  const dispatch = useDispatch()
 
   
 
-//  subscribe cart and wishlist
-//   const cartItems = useSelector((state) => state.cart.items);
-//   const wishlistItems = useSelector((state) => state.wishlist.items || []);
-//   const { isAuthenticated, loginWithRedirect } = useAuth0();
-//   const dispatch = useDispatch();
-// on id or baseurl change fetch product by id and set product to product with is initially null
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -70,6 +64,41 @@ function ProductPage() {
 
   }, [id, BASE_URL]);
 
+  const handleAddTocart = async (productId) => {
+    if(!user){
+      toast.error('Please Register with us !!')
+      dispatch(setShowSignup(true));
+      return ;
+    }
+    const loadingToast = toast.loading("Processing cart ...");
+    try {
+      const res = await axios.post(
+        `${BASE_URL}/cart/addorremovecart`,
+        { productId },
+        { withCredentials: true }
+      );
+      // Fetch the updated cart
+    const resp = await axios.get(`${BASE_URL}/cart/all`, {
+      withCredentials: true,
+    });
+
+    dispatch(setUserCart(resp?.data?.cart?.items));
+  
+      if (res.data.success) {
+
+        toast.success(res.data.message || "Product added to cart!");
+      } else {
+        toast.error(res.data.error || "Add to cart failed.");
+      }
+    } catch (error) {
+      console.error("AddToCart error:", error.response?.data || error.message);
+      toast.error(error.response?.data?.message || "Add to cart failed.");
+    } finally {
+      toast.dismiss(loadingToast);
+    }
+  };
+  
+
   // if loading show a loading text
   if (loading) {
     return (
@@ -78,54 +107,6 @@ function ProductPage() {
       </div>
     );
   }
- // handle cart btn handler
-//   const handleCart = (event, product) => {
-//     event.stopPropagation(); // ✨ ADD THIS AS FIRST LINE
-//     event.preventDefault();
-
- // Double check isAuthenticated, if user not loged in than loginWithRedirect
-//     if (typeof isAuthenticated !== "undefined" && !isAuthenticated) {
-//       console.log("User not authenticated, redirecting to login...");
-//       toast("Please login to save your cart.", { icon: "🔒" });
-//       loginWithRedirect();
-//       return;
-//     } else {
-//        // if isAuthenticated, if user logged in than 
-//       // if product id is equal to any item in cartItems of user than remove from cart, dispatch removeFromCart
-//       // otherwise add to cart, dispatch addToCart
-//       if (cartItems.some((item) => item.id === product?.id)) {
-//         dispatch(removeFromCart(product));
-//         toast.success("Product Removed From Cart");
-//       } else {
-//         dispatch(addToCart(product));
-//         toast.success("Product Added To Cart");
-//       }
-//     }
-//   };
-
-  // handle wishlist btn
-//   const handleWishlist = (event, product) => {
-//     event.stopPropagation(); // stop navigating
-//     event.preventDefault();
-//     // Double check isAuthenticated, if user not loged in than loginWithRedirect
-//     if (typeof isAuthenticated !== "undefined" && !isAuthenticated) {
-//       console.log("User not authenticated, redirecting to login...");
-//       toast("Please login to save your cart.", { icon: "🔒" });
-//       loginWithRedirect();
-//       return;
-//     } else {
-//       // if isAuthenticated, if user logged in than 
-//       // if product id is equal to any item in wishlsitItems of user than remove from wishlist, dispatch removeWishlsiCart
-//       // otherwise add to wishlist, dispatch addToWishlist
-//       if (wishlistItems.some((item) => item.id === product?.id)) {
-//         dispatch(removeFromWishlist(product));
-//         toast.success("Product Removed From Wishlist !!");
-//       } else {
-//         dispatch(addToWishlist(product));
-//         toast.success("Product Added To Wishlist !!");
-//       }
-//     }
-//   };
 
   // fallback if no product found than show a text PRoduct Not Found
   if (!product) {
@@ -135,6 +116,8 @@ function ProductPage() {
       </div>
     );
   }
+
+  
 
   return (
     <div className="max-w-7xl mx-0 md:mx-auto p-4 md:p-8 overflow-x-hidden min-h-[70vh]">
@@ -161,7 +144,7 @@ function ProductPage() {
               onClick={(event) => handleWishlist(event, product)}
               className="p-2 rounded-full  cursor-pointer"
             >
-                            <FaHeart size={20} className="text-red-600" />
+                            <FaHeart size={20} className="text-[#24A3B5]" />
               {/* {wishlistItems.some((item) => item._id === product._id) ? (
                 <FaHeart size={20} className="text-red-600" />
               ) : (
@@ -191,7 +174,7 @@ function ProductPage() {
             <p>🎉 25% off for New Customers | Use Code: NEW25</p>
             <p
               onClick={() => setShowmoreoffer((prev) => !prev)}
-              className="text-pink-600 font-semibold cursor-pointer"
+              className="text-[#24A3B5] font-semibold cursor-pointer"
             >
               {showMoreoffer ? "See less" : "See 3 More Offers"}
             </p>
@@ -213,7 +196,7 @@ function ProductPage() {
             <div className="flex items-center justify-between">
               <h3 className="font-semibold">Ship To</h3>
               <label
-                className="text-pink-600 text-sm font-semibold cursor-pointer"
+                className="text-[#24A3B5] text-sm font-semibold cursor-pointer"
                 htmlFor="pincode"
               >
                 Change Pincode
@@ -264,7 +247,7 @@ function ProductPage() {
               onClick={(event) => handleWishlist(event, product)}
               className="p-3 border cursor-pointer rounded-md"
             >
-            <FaHeart size={20} color="red" />
+            <FaHeart size={20} color="#24A3B5" />
               {/* {wishlistItems.some((item) => item._id === product?._id) ? (
                 <FaHeart size={20} color="red" />
               ) : (
@@ -291,7 +274,7 @@ function ProductPage() {
                         </div>
                         <div className="ml-3 flex-1">
                           <p className="text-sm font-medium text-gray-900">
-                            Tata CLiQ
+                            Shop Clues
                           </p>
                           <p className="mt-1 text-sm text-gray-500 capitalize">
                             Sorry !! We are not accepting new Order Right Now
@@ -310,18 +293,18 @@ function ProductPage() {
                   </div>
                 ))
               }
-              className="flex-1 cursor-pointer bg-pink-600 hover:bg-pink-700 text-white py-3 rounded-md font-semibold"
+              className="flex-1 cursor-pointer bg-[#24A3B5] hover:scale-95 duration-300 text-white py-3 rounded-md font-semibold"
             >
               Buy Now
             </button>
             <button
-              onClick={(event) => handleCart(event, product)}
-              className="flex-1 border cursor-pointer border-pink-600 text-pink-600 hover:bg-pink-50 py-3 rounded-md font-semibold"
+              onClick={() => handleAddTocart(product._id)} // pass only product._id
+              className="flex-1 border cursor-pointer border-[#24A3B5] text-[#24A3B5] hover:scale-95 duration-300 py-3 rounded-md font-semibold"
             >
-            Add
-              {/* {cartItems.some((item) => item.id === product.id)
+          
+             {cartItems?.some((item) => item?.productId?._id === product?._id)
                 ? "Remove From Bag"
-                : "Add To Bag"} */}
+                : "Add To Bag"} 
             </button>
           </div>
         </div>

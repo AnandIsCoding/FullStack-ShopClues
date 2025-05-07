@@ -10,16 +10,43 @@ import {
 import { useLocation, useNavigate } from "react-router-dom";
 import Signup from "./Signup";
 import { setShowSignup, toggleSignupModal } from "../redux/slices/modal.slice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import toast from "react-hot-toast";
+import axios from "axios";
+import { setUser } from "../redux/slices/user.slice";
+const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 function LoginPopup() {
   const navigate = useNavigate();
-  let user = null
+  const user = useSelector(state => state.user.user)
   const dispatch = useDispatch()
 
   const handleTogleSignup = () =>{
     dispatch(toggleSignupModal())
   }
+
+  const logoutHandler = async (event) => {
+    event.preventDefault();
+    const loadingToast = toast.loading("Processing Logout...");
+    try {
+      const res = await axios.delete(
+        `${BASE_URL}/user/logout`,{ withCredentials: true }
+      );
+      if (res.data.success) {
+        toast.success(res.data.message); // <-- 👈 Show "User Logged out successfully !!"
+        dispatch(setUser(null))
+        navigate("/");
+      } else {
+        toast.error(res.data.error || "Logout failed.");
+      }
+      // Optionally: redirect or clear form
+    } catch (error) {
+      console.error("Logout error:", error.response?.data || error.message);
+      toast.error(error.response?.data?.message || "Logout failed !");
+    } finally {
+      toast.dismiss(loadingToast); // Dismiss the loading toast
+    }
+  };
 
   
 
@@ -32,13 +59,13 @@ function LoginPopup() {
     {user ? (
         <div className="flex items-center justify-between mb-4">
           <img
-            src={user?.picture}
+            src={user?.profilePic}
             alt={user?.name}
             className="w-10 h-10 rounded-full"
           />
           <button
             className="w-full ml-2 px-4 py-2 bg-[#FF0C22] text-white rounded-full cursor-pointer"
-            onClick={() => alert('hii')}
+            onClick={logoutHandler}
           >
             Logout
           </button>

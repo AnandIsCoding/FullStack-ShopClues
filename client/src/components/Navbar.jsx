@@ -15,21 +15,24 @@ import SearchResultTab from "./SearchResultTab.jsx";
 import { useNavigate } from "react-router-dom";
 import LoginPopup from "../MiniUi/LoginPopup.jsx";
 import { useRef } from "react";
-
+import { useSelector } from "react-redux";
+import toast from "react-hot-toast";
 
 export default function Navbar() {
   const [search, setSearch] = useState("");
   const [hoveredCategoryId, setHoveredCategoryId] = useState(null);
   const [hoveredCategoryName, setHoveredCategoryName] = useState(null);
   const [allCategories, setAllCategories] = useState([]);
-  const [showLoginpopup, setShowloginpopup] = useState(false)
-  
-  const BASE_URL = import.meta.env.VITE_BASE_URL;
-  document.addEventListener('click',()=>{
-    setShowloginpopup(false)
-  })
+  const [showLoginpopup, setShowloginpopup] = useState(false);
 
-  
+  const BASE_URL = import.meta.env.VITE_BASE_URL;
+  document.addEventListener("click", () => {
+    setShowloginpopup(false);
+  });
+
+  const user = useSelector((state) => state.user.user);
+  const cartItems = useSelector((state) => state.user.cart);
+  console.log("Cart items ---> ", cartItems);
 
   const fetchCategories = async () => {
     try {
@@ -63,9 +66,6 @@ export default function Navbar() {
           </a>
           <a href="#" className="hover:underline text-gray-600 ">
             Contact Us
-          </a>
-          <a href="#" className="hover:underline text-gray-600 ">
-            Download App
           </a>
         </div>
       </div>
@@ -114,31 +114,39 @@ export default function Navbar() {
                 Location
               </span>
             </div>
-            <IoMdHeartEmpty
+            {/* <IoMdHeartEmpty
               onClick={() => navigate("/wishlist")}
               className="cursor-pointer text-[#24A3B5] text-2xl font-bold"
-            />
-            <IoMdNotificationsOutline className="cursor-pointer text-[#24A3B5] text-2xl font-bold" />
-            <IoCartOutline
-              onClick={() => navigate("/cart")}
-              className="cursor-pointer text-[#24A3B5] text-2xl font-bold"
-            />
+            /> */}
+            <IoMdNotificationsOutline onClick={()=>toast.success('Under Construction ...')} className="cursor-pointer text-[#24A3B5] text-2xl font-bold" />
             <div
-  className="relative"
-  onMouseEnter={() => setShowloginpopup(true)}
-  onMouseLeave={() => setShowloginpopup(false)}
->
-  <button className="text-sm bg-white cursor-pointer px-3 py-1 rounded">
-    Sign In / Account
-  </button>
-  {showLoginpopup && <LoginPopup />}
-</div>
+              className="relative cursor-pointer"
+              onClick={() => navigate("/cart")}
+            >
+              <IoCartOutline className="text-[#24A3B5] text-2xl font-bold" />
+              {cartItems?.length > 0 && (
+                <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full">
+                  {cartItems?.length}
+                </span>
+              )}
+            </div>
+
+            <div
+              className="relative"
+              onMouseEnter={() => setShowloginpopup(true)}
+              onMouseLeave={() => setShowloginpopup(false)}
+            >
+              <button className="text-sm bg-white cursor-pointer px-3 py-1 rounded">
+                {user ? "My Account 🙋" : "Signup / Login"}
+              </button>
+              {showLoginpopup && <LoginPopup />}
+            </div>
           </div>
         </div>
       </div>
 
-           {/* Category Menu */}
-           <div className="w-full bg-[#24A3B5] text-white text-xxs sm:text-xs font-thin uppercase">
+      {/* Category Menu */}
+      <div className="w-full bg-[#24A3B5] text-white text-xxs sm:text-xs font-thin uppercase">
         <div className="overflow-x-auto md:overflow-x-hidden">
           <div
             className="flex flex-nowrap md:flex-wrap gap-4 px-4 py-2 w-max md:w-full 

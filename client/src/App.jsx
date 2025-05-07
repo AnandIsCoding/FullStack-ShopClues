@@ -9,14 +9,18 @@ import Cart from './pages/Cart'
 import Wishlist from './pages/Wishlist'
 import Footer from './components/Footer';
 import ProductPage from '../src/pages/ProductPage'
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Signup from './MiniUi/Signup';
 import axios from 'axios';
+import { setUser, setUserCart } from './redux/slices/user.slice';
+import ProfilePage from './pages/ProfilePage';
 const BASE_URL = import.meta.env.VITE_BASE_URL
+
 
 function App() {
  
   const isshowSignupPage = useSelector(state => state.modal.showSignupPage)
+  const dispatch = useDispatch()
   console.log(isshowSignupPage)
   const disableContextMenu = (event) => {
     event.preventDefault();  // Disable the right-click menu
@@ -29,16 +33,30 @@ function App() {
       const res = await axios.get(`${BASE_URL}/user/profile`, {
         withCredentials: true,
       });
-  
-      console.log("Profile Fetched:", res.data);
+      dispatch(setUser(res.data.user))
       // You can update user state or Redux here
     } catch (error) {
       console.error("Error in ProfileHandler:", error.response?.data || error.message);
     }
   };
+
+  const GetCartHandler = async() =>{
+    try {
+      const res = await axios.get(`${BASE_URL}/cart/all`, {
+        withCredentials: true,
+      });
+      console.log(res?.data?.cart?.items)
+      dispatch(setUserCart(res?.data?.cart?.items))
+    } catch (error) {
+      console.error("Error in GetCartHandler :", error.response?.data || error.message); 
+    }
+  }
+
+
   
   useEffect(() => {
     ProfileHandler();
+    GetCartHandler()
   }, []);
   
   
@@ -69,6 +87,7 @@ function App() {
         {/* <Route path='/profile' element={<Profile/>} />
         <Route path='/orders' element={ <Orders/> } /> */}
         <Route path="/product/:id" element={<ProductPage/>} />
+        <Route path='/profile' element={<ProfilePage/>} />
       </Routes>
 
 {/* Footerfor all pages */}
