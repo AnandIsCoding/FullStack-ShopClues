@@ -73,7 +73,7 @@ export const signupController = async (req, res) => {
       password: encryptedPassword,
       googleId,
       contact,
-      profilePic:response.secure_url
+      profilePic:profilePicUrl
     });
 
     // Generate token
