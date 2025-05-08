@@ -73,7 +73,7 @@ export const signupController = async (req, res) => {
       password: encryptedPassword,
       googleId,
       contact,
-      ...(profilePicUrl && { profilePic: profilePicUrl }), // use uploaded image only if available
+      profilePic:response.secure_url
     });
 
     // Generate token
