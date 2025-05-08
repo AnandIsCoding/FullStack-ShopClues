@@ -3,7 +3,7 @@ import { FaFacebookF, FaTwitter, FaInstagram, FaYoutube, FaLinkedin } from "reac
 import { SiAndroid, SiApple } from "react-icons/si"; 
 import { NavLink } from "react-router-dom";
 
-const ShopCluesFooter = () => {
+const Footer = () => {
   return (
     <footer className="bg-gray-100 text-gray-700 py-10 text-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -223,4 +223,4 @@ const ShopCluesFooter = () => {
   );
 };
 
-export default ShopCluesFooter;
+export default Footer;

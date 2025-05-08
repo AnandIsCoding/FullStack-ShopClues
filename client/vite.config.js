@@ -1,16 +1,17 @@
 import { defineConfig } from 'vite'
 import tailwindcss from '@tailwindcss/vite'
+import { configDefaults } from 'vitest/config' 
 //import { configDefaults } from 'vitest/config' 
 export default defineConfig({
   plugins: [
     tailwindcss(),
   ],
-  // test: {
-  //   globals: true,
-  //   environment: 'jsdom',
-  //   setupFiles: './src/test/setup.js',
-  //   exclude: [...configDefaults.exclude, 'node_modules'],
-  // },
+  test: {
+    globals: true,
+    environment: 'jsdom',
+    setupFiles: './src/Test/setup.js',
+    exclude: [...configDefaults.exclude, 'node_modules'],
+  },
   theme:{
     extend: {
       keyframes: {

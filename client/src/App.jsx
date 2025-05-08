@@ -1,21 +1,26 @@
-import React, { useEffect } from 'react'
+import React, { lazy, useEffect } from 'react'
 import { Suspense } from 'react'
 import ScrollToTop from '../src/components/ScrollToTop'
 import Navbar from './components/Navbar';
-import MobileOptions from './components/MobileOptions';
+import { useDispatch, useSelector } from 'react-redux';
+
 import { Route, Routes } from 'react-router-dom';
-import Home from './pages/Home';
-import Cart from './pages/Cart'
-import Wishlist from './pages/Wishlist'
+import axios from 'axios';
+const Home = lazy(() => import('./pages/Home'));
+
+const Cart = lazy(()=>import('./pages/Cart'))
+const Wishlist = lazy(()=>import('./pages/Wishlist'))
+import MobileOptions from './components/MobileOptions';
 import Footer from './components/Footer';
 import ProductPage from '../src/pages/ProductPage'
-import { useDispatch, useSelector } from 'react-redux';
+
 import Signup from './MiniUi/Signup';
-import axios from 'axios';
+
 import { setUser, setUserCart } from './redux/slices/user.slice';
-import ProfilePage from './pages/ProfilePage';
-import SellWithUs from './pages/SellWithUs';
-import ContactUs from './pages/ContactUs';
+const ProfilePage = lazy(()=>import('./pages/ProfilePage'))
+const SellWithUs = lazy(()=>import('./pages/SellWithUs'))
+const ContactUs = lazy(()=>import('./pages/ContactUs'))
+
 const BASE_URL = import.meta.env.VITE_BASE_URL
 
 

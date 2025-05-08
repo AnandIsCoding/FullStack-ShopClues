@@ -151,14 +151,9 @@ npm start
 
 ## ✉️ Contact
 
-Created by **Your Name** – [anandkumarj669@gmail.com](mailto:your-email@example.com)
+Created by **Anand Jha** – [anandkumarj669@gmail.com](mailto:anandkumarj669@gmail.com)
+My Portfolio - [https://anandjha.netlify.app] 
 Feel free to contact me for feedback, feature requests, or collaborations!
-
----
-
-## 📜 License
-
-This project is licensed under the MIT License.
 
 ---
 
