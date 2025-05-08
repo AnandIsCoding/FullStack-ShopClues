@@ -1,6 +1,7 @@
 import React from "react";
 import { FaFacebookF, FaTwitter, FaInstagram, FaYoutube, FaLinkedin } from "react-icons/fa";
 import { SiAndroid, SiApple } from "react-icons/si"; 
+import { NavLink } from "react-router-dom";
 
 const ShopCluesFooter = () => {
   return (
@@ -12,7 +13,9 @@ const ShopCluesFooter = () => {
             <h4 className="font-semibold mb-4">ShopClues Marketplace</h4>
             <ul className="space-y-2">
               <li>
-                <a href="#">About Us</a>
+              <NavLink to='/contactus' className="hover:underline text-gray-600 ">
+            Contact Us
+          </NavLink>
               </li>
               <li>
                 <a href="#">Careers</a>
@@ -62,7 +65,9 @@ const ShopCluesFooter = () => {
             <h4 className="font-semibold mb-4">My ShopClues</h4>
             <ul className="space-y-2">
               <li>
-                <a href="#">My Account</a>
+                <NavLink to='/profile' className="hover:underline text-gray-600 ">
+                            My Account
+                          </NavLink>
               </li>
               <li>
                 <a href="#">My Orders</a>

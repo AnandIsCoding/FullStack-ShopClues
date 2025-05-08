@@ -14,6 +14,8 @@ import Signup from './MiniUi/Signup';
 import axios from 'axios';
 import { setUser, setUserCart } from './redux/slices/user.slice';
 import ProfilePage from './pages/ProfilePage';
+import SellWithUs from './pages/SellWithUs';
+import ContactUs from './pages/ContactUs';
 const BASE_URL = import.meta.env.VITE_BASE_URL
 
 
@@ -88,6 +90,8 @@ function App() {
         <Route path='/orders' element={ <Orders/> } /> */}
         <Route path="/product/:id" element={<ProductPage/>} />
         <Route path='/profile' element={<ProfilePage/>} />
+        <Route path='/sellwithus' element={<SellWithUs/>} />
+        <Route path='/contactus' element={<ContactUs/>} />
       </Routes>
 
 {/* Footerfor all pages */}

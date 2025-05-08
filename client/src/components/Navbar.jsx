@@ -12,7 +12,7 @@ import axios from "axios";
 import { NavCategoryItems } from "../utils/HelperData.js";
 import MegaDropDown from "./MegaDropDown.jsx";
 import SearchResultTab from "./SearchResultTab.jsx";
-import { useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import LoginPopup from "../MiniUi/LoginPopup.jsx";
 import { useRef } from "react";
 import { useSelector } from "react-redux";
@@ -61,12 +61,12 @@ export default function Navbar() {
           <span className="text-teal-600">CLUES</span>
         </div>
         <div className="flex gap-2">
-          <a href="#" className="hover:underline text-gray-600 ">
+          <NavLink to='/sellwithus' className="hover:underline text-gray-600 ">
             Sell With Us
-          </a>
-          <a href="#" className="hover:underline text-gray-600 ">
+          </NavLink>
+          <NavLink to='/contactus' className="hover:underline text-gray-600 ">
             Contact Us
-          </a>
+          </NavLink>
         </div>
       </div>
 
