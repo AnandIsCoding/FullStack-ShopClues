@@ -7,7 +7,7 @@ import { isFileTypeSupported, uploadFileToCloudinary } from "../utils/helpers.ut
 export const signupController = async (req, res) => {
   try {
     const { userName, email, password, contact, googleId } = req.body;
-    const profilePic = req.file ? req.file : null;
+    const profilePic = req.file;
 
     // Basic validations
     if (!userName || !email) {
@@ -46,9 +46,7 @@ export const signupController = async (req, res) => {
       });
     }
 
-    // Handle file upload if present
-    let profilePicUrl;
-    if (profilePic) {
+    
       const supportedTypes = ["jpeg", "jpg", "png"];
       const fileType = profilePic.originalname.split(".").pop().toLowerCase();
 
@@ -61,8 +59,6 @@ export const signupController = async (req, res) => {
       }
 
       const response = await uploadFileToCloudinary(profilePic.path, "ShopClues");
-      profilePicUrl = response.secure_url;
-    }
 
     const encryptedPassword = password ? await bcrypt.hash(password, 10) : undefined;
 
@@ -73,7 +69,7 @@ export const signupController = async (req, res) => {
       password: encryptedPassword,
       googleId,
       contact,
-      profilePic:profilePicUrl
+      profilePic:response.secure_url
     });
 
     // Generate token
