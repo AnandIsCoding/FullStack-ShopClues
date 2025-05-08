@@ -9,12 +9,14 @@ export const signupController = async (req, res) => {
     const { userName, email, password, contact, googleId } = req.body;
     const profilePic = req.file ? req.file : null;
 
+
+
     // Basic validations
-    if (!userName || !email || !profilePic) {
+    if (!userName || !email) {
       return res.status(400).json({
         success: false,
-        message: 'Required Field Missing!',
-        error: 'Required Field Missing!',
+        message: 'Required Field Missing !',
+        error: 'Required Field Missing !',
       });
     }
 
@@ -46,7 +48,9 @@ export const signupController = async (req, res) => {
       });
     }
 
-    
+    // Handle file upload if present
+    let profilePicUrl;
+    if (profilePic) {
       const supportedTypes = ["jpeg", "jpg", "png"];
       const fileType = profilePic.originalname.split(".").pop().toLowerCase();
 
@@ -59,6 +63,8 @@ export const signupController = async (req, res) => {
       }
 
       const response = await uploadFileToCloudinary(profilePic.path, "ShopClues");
+      profilePicUrl = response.secure_url;
+    }
 
     const encryptedPassword = password ? await bcrypt.hash(password, 10) : undefined;
 
@@ -69,7 +75,7 @@ export const signupController = async (req, res) => {
       password: encryptedPassword,
       googleId,
       contact,
-      profilePic:response.secure_url
+      ...(profilePicUrl && { profilePic: profilePicUrl }), // use uploaded image only if available
     });
 
     // Generate token

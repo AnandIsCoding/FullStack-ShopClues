@@ -21,7 +21,7 @@ function App() {
  
   const isshowSignupPage = useSelector(state => state.modal.showSignupPage)
   const dispatch = useDispatch()
-  console.log(isshowSignupPage)
+  // console.log(isshowSignupPage)
   const disableContextMenu = (event) => {
     event.preventDefault();  // Disable the right-click menu
    

@@ -32,7 +32,7 @@ export default function Navbar() {
 
   const user = useSelector((state) => state.user.user);
   const cartItems = useSelector((state) => state.user.cart);
-  console.log("Cart items ---> ", cartItems);
+  // console.log("Cart items ---> ", cartItems);
 
   const fetchCategories = async () => {
     try {

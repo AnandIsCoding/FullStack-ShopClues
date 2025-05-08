@@ -42,9 +42,9 @@ function Signup() {
     data.append("email", formData.email);
     data.append("password", formData.password);
     data.append("contact", formData.contact);
-    if (profilePic) {
-      data.append("profilePic", formData.profilePic);
-    }
+      data.append("profilePic", profilePic);
+
+    
     const loadingToast = toast.loading("Processing signup...");
     try {
       const res = await axios.post(`${BASE_URL}/user/signup`, data, {
