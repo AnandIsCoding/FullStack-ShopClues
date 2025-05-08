@@ -43,7 +43,7 @@ function Signup() {
     data.append("password", formData.password);
     data.append("contact", formData.contact);
     if (profilePic) {
-      data.append("prodilePic", formData.profilePic);
+      data.append("profilePic", formData.profilePic);
     }
     const loadingToast = toast.loading("Processing signup...");
     try {

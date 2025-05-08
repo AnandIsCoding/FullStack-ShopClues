@@ -7,10 +7,10 @@ import { isFileTypeSupported, uploadFileToCloudinary } from "../utils/helpers.ut
 export const signupController = async (req, res) => {
   try {
     const { userName, email, password, contact, googleId } = req.body;
-    const profilePic = req.file;
+    const profilePic = req.file ? req.file : null;
 
     // Basic validations
-    if (!userName || !email) {
+    if (!userName || !email || !profilePic) {
       return res.status(400).json({
         success: false,
         message: 'Required Field Missing!',
