@@ -27,9 +27,6 @@ const userSchema = new mongoose.Schema({
   },
   profilePic: {
     type: String,
-    default: function () {
-      return `https://api.dicebear.com/5.x/initials/svg?seed=${this.userName}`;
-    },
   },
   contact: {
     type: String,
