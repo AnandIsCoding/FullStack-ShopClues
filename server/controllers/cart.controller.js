@@ -1,7 +1,16 @@
 import User from "../models/user.model.js"; 
 import Product from "../models/product.model.js"; 
 import Cart from "../models/cart.model.js"; 
+// in now cart for user 
+// agar cart nhi h user k pass, !user.cart, than create a new cart document in cart collection, in that userId : cart._id, and items will be [{product._id}]
+// than save cart cart.save(), and update user user.cart = cart._id and save (user model has a cart field which stores cartDocument id associated with that user)
+//if user have cart already
+// assign cart to the cart variable
+// check if productId is already in cart.items (items field is in cart model)
+/// if product axists than splice , index find kr k cart.items.splice(index,1)
+// if product is not in cart than push productId to cart.items
 
+// summary: toggle toggle khelna h 😊
 
 export const addRemoveCartController = async (req, res) => {
   try {
@@ -88,7 +97,7 @@ export const addRemoveCartController = async (req, res) => {
 
 
 
-// get cart 
+// get cart , with populating cart, path will be items.productId and model to refer will be Product
 
 export const getUserCartController = async (req, res) => {
   try {

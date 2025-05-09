@@ -3,6 +3,8 @@ import Category from "../models/category.model.js";
 import Product from '../models/product.model.js'
 import { isFileTypeSupported, uploadFileToCloudinary } from "../utils/helpers.utils.js";
 
+
+// create category controller , only admin
 export const createCategoryController = async (req, res) => {
   try {
     const { name, description } = req.body;
@@ -42,14 +44,15 @@ export const createCategoryController = async (req, res) => {
             error: "Unsupported file type",
           });
         }
-    
+    // upload file to cloudinary
         const response = await uploadFileToCloudinary(thumbnail.path, "ShopClues");
-    
+    // create category
     const category = await Category.create({
       name,
       description,
       thumbnail:response.secure_url
     });
+    // return response 
     return res.status(200).json({
       success: true,
       message: "Category Created Successfully !!",
